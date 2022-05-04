@@ -17,14 +17,16 @@ enum FEATURES
 };
 
 void print_manual();
-char* user_insert_studuent_id();
+
+void user_insert_studuent_id(char* student_id);
 void user_insert_student_score(double* english, double* math, double* science);
+void user_insert_file_name(char* file_name);
 void user_interface();
 
-void insert_student_data(StudentVec *student_vec);
-void load_from_csv();
-void log_student_data_by_id();
-void search_by_id();
-void search_top_ten_score_by_subject();
-void search_top_ten_score_by_total_score();
-void add_delete_student_data();
+void feature_insert_student_data(StudentVec *student_vec);
+void feature_load_from_csv(StudentVec *student_vec);
+void feature_log_student_data_by_id();
+void feature_search_by_id();
+void feature_search_top_ten_score_by_subject();
+void feature_search_top_ten_score_by_total_score();
+void feature_add_delete_student_data();

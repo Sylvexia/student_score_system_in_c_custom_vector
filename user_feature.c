@@ -14,14 +14,12 @@ void print_manual()
     printf("input the number: ");
 }
 
-char *user_insert_student_id()
+void user_insert_student_id(char *student_id)
 {
-    char *student_id = malloc(sizeof(char) * (10 + 1));
-
     printf("Insert student id:\n");
     scanf("%s", student_id);
 
-    return student_id;
+    return;
 }
 
 void user_insert_student_score(double *english, double *math, double *science)
@@ -38,11 +36,19 @@ void user_insert_student_score(double *english, double *math, double *science)
     return;
 }
 
+void user_insert_file_name(char *file_name)
+{
+    printf("Insert file name:\n");
+    scanf("%s", file_name);
+
+    return;
+}
+
 void user_interface()
 {
     int exit = 0;
     StudentVec student_vec;
-    student_vec_initialize(&student_vec);  //segmentation fault
+    student_vec_initialize(&student_vec);
 
     while (!exit)
     {
@@ -55,25 +61,25 @@ void user_interface()
         switch (feature_id)
         {
         case INSERT_SINGLE_STUDENT:
-            insert_student_data(&student_vec);
+            feature_insert_student_data(&student_vec);
             break;
         case LOAD_CSV:
-            load_from_csv();
+            feature_load_from_csv(&student_vec);
             break;
         case LOG_SORTED_BY_ID:
-            log_student_data_by_id();
+            feature_log_student_data_by_id();
             break;
         case SEARCH_BY_ID:
-            search_by_id();
+            feature_search_by_id();
             break;
         case SEARCH_TOP_TEN_SPCIFIC_SUBJECT:
-            search_top_ten_score_by_subject();
+            feature_search_top_ten_score_by_subject();
             break;
         case SEARCH_TOP_TEN_TOTAL_SCORE:
-            search_top_ten_score_by_total_score();
+            feature_search_top_ten_score_by_total_score();
             break;
         case ADD_DELETE_STUDENT:
-            add_delete_student_data();
+            feature_add_delete_student_data();
             break;
         case EXIT:
             exit = 1;
@@ -85,53 +91,54 @@ void user_interface()
     }
 }
 
-void insert_student_data(StudentVec *student_vec)
+void feature_insert_student_data(StudentVec *student_vec)
 {
-    char *student_id = NULL;
+    char student_id[10 + 1];
     double english, math, science = 0;
     Student new_student;
 
-    student_id = user_insert_student_id();
+    user_insert_student_id(student_id);
     user_insert_student_score(&english, &math, &science);
+
     new_student.english_score = english;
     new_student.math_score = math;
     new_student.science_score = science;
     strcpy(new_student.id, student_id);
 
     student_vec_insert(student_vec, new_student);
-    free(student_id);
-    //student_vec_log(student_vec);
+    student_vec_log(student_vec);
 }
 
-void load_from_csv()
+void feature_load_from_csv(StudentVec *student_vec)
 {
-    char *file_name;
-    printf("Insert file name:\n");
-    scanf("%s", &file_name);
+    char file_name[255];
+    user_insert_file_name(&file_name);
+
+    student_vec_load_from_csv(student_vec, file_name);
 }
 
-void log_student_data_by_id()
+void feature_log_student_data_by_id()
 {
     printf("Student data by id:\n");
 }
 
-void search_by_id()
+void feature_search_by_id()
 {
-    char *student_id;
-    printf("Insert student id:\n");
+    char student_id[10 + 1];
+    user_insert_student_id(student_id);
 }
 
-void search_top_ten_score_by_subject()
+void feature_search_top_ten_score_by_subject()
 {
     printf("Insert subject:\n");
 }
 
-void search_top_ten_score_by_total_score()
+void feature_search_top_ten_score_by_total_score()
 {
     printf("Top 10 total score:\n");
 }
 
-void add_delete_student_data()
+void feature_add_delete_student_data()
 {
     printf("press 1 to add student, ");
     printf("press 2 to delete student\n");
