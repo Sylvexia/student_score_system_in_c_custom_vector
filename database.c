@@ -77,7 +77,7 @@ void student_vec_load_from_csv(StudentVec *student_vec, char *file_name)
     while (fgets(line, 255, fp) != NULL)
     {
         token = strtok(line, ",");
-        
+
         if (token[0] != 'K')
         {
             continue;
@@ -99,6 +99,7 @@ void student_vec_load_from_csv(StudentVec *student_vec, char *file_name)
 
     fclose(fp);
 
+    printf("loaded data:\n");
     student_vec_log(student_vec);
 }
 
@@ -116,55 +117,28 @@ void student_vec_log(StudentVec *student_vec)
                student_vec->student[i].math_score,
                student_vec->student[i].science_score);
     }
+
+    printf("Current size: %d\n", student_vec->size);
 }
 
-void student_vec_sort_by_id(StudentVec *student_vec)
+void student_vec_insertion_sort_by_id(StudentVec *student_vec)
 {
-    //merge sort
-    Student *temp_student;
-    unsigned int temp_size;
-    unsigned int left, right, mid;
+    //insertion sort by id
+    Student temp_student;
+    int i, j;   //j could be negative
 
-    temp_student = (Student *)malloc(sizeof(Student) * student_vec->size);
-
-    if (temp_student == NULL)
+    for (i = 1; i < student_vec->size; i++)
     {
-        printf("malloc error\n");
-        exit(1);
-    }
+        temp_student = student_vec->student[i];
+        j = i - 1;
 
-    for (unsigned int i = 1; i < student_vec->size; i *= 2)
-    {
-        left = 0;
-        right = i;
-        while (left < student_vec->size)
+        while (j >= 0 && strcmp(temp_student.id,
+                                student_vec->student[j].id) <= 0)
         {
-            if (right < student_vec->size)
-            {
-                if (strcmp(student_vec->student[left].id,
-                           student_vec->student[right].id) > 0)
-                {
-                    temp_student[left] = student_vec->student[right];
-                    right += i;
-                }
-                else
-                {
-                    temp_student[left] = student_vec->student[left];
-                    left += i;
-                }
-            }
-            else
-            {
-                temp_student[left] = student_vec->student[left];
-                left += i;
-            }
+            student_vec->student[j + 1] = student_vec->student[j];
+            j--;
         }
 
-        for (unsigned int j = 0; j < student_vec->size; j++)
-        {
-            student_vec->student[j] = temp_student[j];
-        }
+        student_vec->student[j + 1] = temp_student;
     }
-
-    free(temp_student);
 }

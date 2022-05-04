@@ -25,7 +25,7 @@ void user_interface();
 
 void feature_insert_student_data(StudentVec *student_vec);
 void feature_load_from_csv(StudentVec *student_vec);
-void feature_log_student_data_by_id();
+void feature_log_student_data_by_id(StudentVec *student_vec);
 void feature_search_by_id();
 void feature_search_top_ten_score_by_subject();
 void feature_search_top_ten_score_by_total_score();

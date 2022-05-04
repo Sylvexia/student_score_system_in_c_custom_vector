@@ -26,4 +26,4 @@ void student_vec_delete(StudentVec *student_vec, char *id);
 void student_vec_load_from_csv(StudentVec *student_vec, char *file_name);
 void student_vec_destroy(StudentVec *student_vec);
 void student_vec_log(StudentVec *student_vec);
-void student_vec_sort_by_id(StudentVec *student_vec);
+void student_vec_insertion_sort_by_id(StudentVec *student_vec);

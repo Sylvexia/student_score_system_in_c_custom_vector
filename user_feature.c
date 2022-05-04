@@ -67,7 +67,7 @@ void user_interface()
             feature_load_from_csv(&student_vec);
             break;
         case LOG_SORTED_BY_ID:
-            feature_log_student_data_by_id();
+            feature_log_student_data_by_id(&student_vec);
             break;
         case SEARCH_BY_ID:
             feature_search_by_id();
@@ -117,9 +117,11 @@ void feature_load_from_csv(StudentVec *student_vec)
     student_vec_load_from_csv(student_vec, file_name);
 }
 
-void feature_log_student_data_by_id()
+void feature_log_student_data_by_id(StudentVec *student_vec)
 {
-    printf("Student data by id:\n");
+    //student_vec_merge_sort_by_id(student_vec);
+    student_vec_insertion_sort_by_id(student_vec);
+    student_vec_log(student_vec);
 }
 
 void feature_search_by_id()
