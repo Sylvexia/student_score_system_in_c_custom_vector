@@ -1,12 +1,20 @@
 # depslib dependency file v1.0
-1651476151 source:/home/sylvex/test/array_implmentation/main.c
+1651481931 source:/home/sylvex/test/array_implmentation/main.c
+	"user_feature.h"
+
+1651585952 source:/home/sylvex/test/array_implmentation/user_feature.c
+	"user_feature.h"
+
+1651565498 /home/sylvex/test/array_implmentation/user_feature.h
 	<stdio.h>
 	<stdlib.h>
-	"user_feature.h"
+	"database.h"
 
-1651476117 source:/home/sylvex/test/array_implmentation/user_feature.c
-	"user_feature.h"
+1651585898 source:/home/sylvex/test/array_implmentation/database.c
+	"database.h"
 
-1651479738 /home/sylvex/test/array_implmentation/user_feature.h
+1651650124 /home/sylvex/test/array_implmentation/database.h
 	<stdio.h>
+	<stdlib.h>
+	<string.h>
 

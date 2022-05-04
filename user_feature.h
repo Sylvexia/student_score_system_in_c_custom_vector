@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "database.h"
 
 enum FEATURES
@@ -15,13 +16,15 @@ enum FEATURES
     EXIT=8
 };
 
-void insert_student_data();
+void print_manual();
+char* user_insert_studuent_id();
+void user_insert_student_score(double* english, double* math, double* science);
+void user_interface();
+
+void insert_student_data(StudentVec *student_vec);
 void load_from_csv();
 void log_student_data_by_id();
 void search_by_id();
 void search_top_ten_score_by_subject();
 void search_top_ten_score_by_total_score();
 void add_delete_student_data();
-
-void print_manual();
-void user_interface();
