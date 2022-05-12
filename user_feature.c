@@ -6,12 +6,12 @@ void print_manual()
     printf("1. insert single student data, if exist, overwrite\n");
     printf("2. load from csv\n");
     printf("3. logging the student data, sorted by id\n");
-    printf("4. search by specific studnt id, list all subject score, total score, average, rank from all subjects, rank by total score\n");
-    printf("5. search top 10 score by specific subject");
+    printf("4. search by specific student id, list all subject score, total score, average, rank from all subjects, rank by total score\n");
+    printf("5. search top 10 score by specific subject\n");
     printf("6. search top 10 score by total score\n");
     printf("7. add, delete student data\n");
     printf("8. exit\n");
-    printf("input the number: ");
+    printf("input the number: \n");
 }
 
 void user_insert_student_id(char *student_id)
@@ -70,16 +70,16 @@ void user_interface()
             feature_log_student_data_by_id(&student_vec);
             break;
         case SEARCH_BY_ID:
-            feature_search_by_id();
+            feature_search_by_id(&student_vec);
             break;
         case SEARCH_TOP_TEN_SPCIFIC_SUBJECT:
-            feature_search_top_ten_score_by_subject();
+            feature_search_top_ten_score_by_subject(&student_vec);
             break;
         case SEARCH_TOP_TEN_TOTAL_SCORE:
-            feature_search_top_ten_score_by_total_score();
+            feature_search_top_ten_score_by_total_score(&student_vec);
             break;
         case ADD_DELETE_STUDENT:
-            feature_add_delete_student_data();
+            feature_add_delete_student_data(&student_vec);
             break;
         case EXIT:
             exit = 1;
@@ -95,18 +95,13 @@ void feature_insert_student_data(StudentVec *student_vec)
 {
     char student_id[10 + 1];
     double english, math, science = 0;
-    Student new_student;
 
     user_insert_student_id(student_id);
     user_insert_student_score(&english, &math, &science);
 
-    new_student.english_score = english;
-    new_student.math_score = math;
-    new_student.science_score = science;
-    strcpy(new_student.id, student_id);
+    Student new_student = student_data_set(student_id, english, math, science);
 
-    student_vec_insert(student_vec, new_student);
-    student_vec_log(student_vec);
+    student_vec_add(student_vec, new_student);
 }
 
 void feature_load_from_csv(StudentVec *student_vec)
@@ -119,29 +114,78 @@ void feature_load_from_csv(StudentVec *student_vec)
 
 void feature_log_student_data_by_id(StudentVec *student_vec)
 {
-    //student_vec_merge_sort_by_id(student_vec);
-    student_vec_insertion_sort_by_id(student_vec);
+    student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
+    //student_vec_insertion_sort_by_id(student_vec);
     student_vec_log(student_vec);
 }
 
-void feature_search_by_id()
+void feature_search_by_id(StudentVec *student_vec)
 {
     char student_id[10 + 1];
     user_insert_student_id(student_id);
+
+    Student student = student_vec_search_by_id(student_vec, student_id);
+    student_vec_log_evaluate(student_vec, student);
 }
 
-void feature_search_top_ten_score_by_subject()
+void feature_search_top_ten_score_by_subject(StudentVec *student_vec)
 {
+    Subject subject;
+    StudentVec top_ten_student_vec[10];
+
     printf("Insert subject:\n");
+    printf("1. english\n");
+    printf("2. math\n");
+    printf("3. science\n");
+
+    scanf("%d", &subject);
+
+    switch (subject)
+    {
+    case ENGLISH:
+        student_vec_log_top_ten_score_by_subject(student_vec, ENGLISH);
+        break;
+
+    case MATH:
+        student_vec_log_top_ten_score_by_subject(student_vec, MATH);
+        break;
+
+    case SCIENCE:
+        student_vec_log_top_ten_score_by_subject(student_vec, SCIENCE);
+        break;
+
+    default:
+        printf("input error\n");
+        break;
+    }
 }
 
-void feature_search_top_ten_score_by_total_score()
+void feature_search_top_ten_score_by_total_score(StudentVec *student_vec)
 {
-    printf("Top 10 total score:\n");
+    student_vec_log_top_ten_score_by_total_score(student_vec);
 }
 
-void feature_add_delete_student_data()
+void feature_add_delete_student_data(StudentVec *student_vec)
 {
+    int choice = 0;
+    int english, math, science;
+    char student_id[10 + 1];
+
     printf("press 1 to add student, ");
     printf("press 2 to delete student\n");
+
+    scanf("%d", &choice);
+
+    if (choice == 1)
+    {
+        user_insert_student_id(student_id);
+        user_insert_student_score(&english, &math, &science);
+        Student new_student = student_data_set(student_id, english, math, science);
+        student_vec_add(student_vec, new_student);
+    }
+    else if (choice == 2)
+    {
+        user_insert_student_id(student_id);
+        student_vec_delete(student_vec, student_id);
+    }
 }
