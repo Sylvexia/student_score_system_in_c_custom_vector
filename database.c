@@ -34,18 +34,18 @@ void student_vec_grow(StudentVec *student_vec)
 void student_vec_add(StudentVec *student_vec, Student student)
 {
     //if student.id exist in student_vec, overwrite student data
-    for (unsigned int i = 0; i < student_vec->size; i++)
-    {
-        if (strcmp(student_vec->student[i].id, student.id) == 0)
-        {
-            student_vec->student[i].english_score = student.english_score;
-            student_vec->student[i].math_score = student.math_score;
-            student_vec->student[i].science_score = student.science_score;
-            student_vec->student[i].total_score = student.total_score;
-            student_vec->student[i].average_score = student.average_score;
-            return;
-        }
-    }
+    // for (unsigned int i = 0; i < student_vec->size; i++)
+    // {
+    //     if (strcmp(student_vec->student[i].id, student.id) == 0)
+    //     {
+    //         student_vec->student[i].english_score = student.english_score;
+    //         student_vec->student[i].math_score = student.math_score;
+    //         student_vec->student[i].science_score = student.science_score;
+    //         student_vec->student[i].total_score = student.total_score;
+    //         student_vec->student[i].average_score = student.average_score;
+    //         return;
+    //     }
+    // }
 
     if (student_vec->size >= student_vec->capacity)
     {
@@ -54,6 +54,15 @@ void student_vec_add(StudentVec *student_vec, Student student)
 
     student_vec->student[student_vec->size] = student;
     student_vec->size++;
+}
+
+void student_vec_add_rand_data(StudentVec *student_vec, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        Student student = student_rand_data();
+        student_vec_add(student_vec, student);
+    }
 }
 
 void student_vec_delete(StudentVec *student_vec, char *id)
@@ -65,6 +74,7 @@ void student_vec_delete(StudentVec *student_vec, char *id)
             for (unsigned int j = i; j < student_vec->size - 1; j++)
             {
                 //student_vec->student[j] = student_vec->student[j + 1];
+                strcpy(student_vec->student[j].id, student_vec->student[j + 1].id);
                 student_vec->student[j].english_score = student_vec->student[j + 1].english_score;
                 student_vec->student[j].math_score = student_vec->student[j + 1].math_score;
                 student_vec->student[j].science_score = student_vec->student[j + 1].science_score;
@@ -134,7 +144,7 @@ void student_vec_load_from_csv(StudentVec *student_vec, char *file_name)
 
         token_science = strtok(NULL, ",");
 
-        new_student = student_data_set(token_id, atof(token_english), atof(token_math), atof(token_science));
+        new_student = student_set_data(token_id, atof(token_english), atof(token_math), atof(token_science));
 
         student_vec_add(student_vec, new_student);
     }
@@ -143,6 +153,35 @@ void student_vec_load_from_csv(StudentVec *student_vec, char *file_name)
 
     printf("loaded data:\n");
     student_vec_log(student_vec);
+}
+
+void student_vec_save_to_csv(StudentVec *student_vec, char *file_name)
+{
+    FILE *fp;
+    char line[255];
+    char *token_id;
+    double token_english, token_math, token_science;
+
+    fp = fopen(file_name, "w");
+
+    if (fp == NULL)
+    {
+        printf("file open error\n");
+        exit(1);
+    }
+
+    for (unsigned int i = 0; i < student_vec->size; i++)
+    {
+        token_id = student_vec->student[i].id;
+        token_english = student_vec->student[i].english_score;
+        token_math = student_vec->student[i].math_score;
+        token_science = student_vec->student[i].science_score;
+
+        sprintf(line, "%s,%lf,%lf,%lf\n", token_id, token_english, token_math, token_science);
+        fputs(line, fp);
+    }
+
+    fclose(fp);
 }
 
 void student_vec_destroy(StudentVec *student_vec)
@@ -291,7 +330,7 @@ void student_vec_log_top_ten_score_by_total_score(StudentVec *student_vec)
         for (unsigned int j = 0; j < student_vec->size; j++)
         {
             unsigned int continue_flag = 0;
-            
+
             for (unsigned int l = 0; l < k; l++) //if find jth largest, skip
             {
                 if (used_index[l] == j)
@@ -312,7 +351,7 @@ void student_vec_log_top_ten_score_by_total_score(StudentVec *student_vec)
             }
         }
         used_index[i] = max_index;
-        
+
         printf("rank: %d, id: %s, score: %lf\n", i + 1, student_vec->student[max_index].id, max_score);
     }
 }
@@ -357,7 +396,10 @@ void student_vec_merge_by_id(StudentVec *student_vec, int start, int mid, int en
     int i, j, k;
     int n1 = mid - start + 1;
     int n2 = end - mid;
-    Student L[n1], R[n2];
+
+    Student *L = malloc(n1 * sizeof(Student));
+    Student *R = malloc(n2 * sizeof(Student));
+    //Student L[n1], R[n2];
 
     for (i = 0; i < n1; i++)
     {
@@ -401,6 +443,9 @@ void student_vec_merge_by_id(StudentVec *student_vec, int start, int mid, int en
         j++;
         k++;
     }
+
+    free(L);
+    free(R);
 }
 
 void student_vec_tim_sort_by_id(StudentVec *student_vec)
@@ -408,7 +453,7 @@ void student_vec_tim_sort_by_id(StudentVec *student_vec)
     //tim sort
 }
 
-Student student_data_set(char *id, double english, double math, double science)
+Student student_set_data(char *id, double english, double math, double science)
 {
     Student student;
 
@@ -425,5 +470,28 @@ Student student_data_set(char *id, double english, double math, double science)
     student.average_score = student.total_score / 3.0;
     strcpy(student.id, id);
 
+    return student;
+}
+
+Student student_rand_data()
+{
+    double rand_english = (rand() % 1000000) / 1000.0;
+    double rand_math = (rand() % 1000000) / 1000.0;
+    double rand_science = (rand() % 1000000) / 1000.0;
+    double rand_total = rand_english + rand_math + rand_science;
+    double rand_average = rand_total / 3.0;
+
+    char rand_id[10 + 1];
+
+    rand_id[0] = 'K';
+
+    for (int i = 1; i <= 9; i++)
+    {
+        rand_id[i] = rand() % 10 + '0';
+    }
+
+    rand_id[10] = '\0';
+
+    Student student = student_set_data(rand_id, rand_english, rand_math, rand_science);
     return student;
 }
