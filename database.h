@@ -22,7 +22,7 @@ typedef struct student_data
     double average_score;
 } Student;
 
-typedef struct student_vector //dynamic array implementation
+typedef struct student_vector // dynamic array implementation
 {
     Student *student;
     unsigned int size;
@@ -43,10 +43,12 @@ void student_vec_log(StudentVec *student_vec);
 void student_vec_log_evaluate(StudentVec *student_vec, Student student);
 void student_vec_log_top_ten_score_by_subject(StudentVec *student_vec, int subject);
 void student_vec_log_top_ten_score_by_total_score(StudentVec *student_vec);
-void student_vec_insertion_sort_by_id(StudentVec *student_vec);
+void student_vec_insertion_sort_by_id(StudentVec *student_vec, int left, int right);
 void student_vec_merge_sort_by_id(StudentVec *student_vec, int start, int end);
 void student_vec_merge_by_id(StudentVec *student_vec, int start, int mid, int end);
 void student_vec_tim_sort_by_id(StudentVec *student_vec);
 
 Student student_set_data(char *id, double english, double math, double science);
 Student student_rand_data();
+
+double min(double a, double b);

@@ -33,26 +33,26 @@ void student_vec_grow(StudentVec *student_vec)
 
 void student_vec_add(StudentVec *student_vec, Student student)
 {
-    //if student.id exist in student_vec, overwrite student data
-    // for (unsigned int i = 0; i < student_vec->size; i++)
-    // {
-    //     if (strcmp(student_vec->student[i].id, student.id) == 0)
-    //     {
-    //         student_vec->student[i].english_score = student.english_score;
-    //         student_vec->student[i].math_score = student.math_score;
-    //         student_vec->student[i].science_score = student.science_score;
-    //         student_vec->student[i].total_score = student.total_score;
-    //         student_vec->student[i].average_score = student.average_score;
-    //         return;
-    //     }
-    // }
+    // if student.id exist in student_vec, overwrite student data
+    //  for (unsigned int i = 0; i < student_vec->size; i++)
+    //  {
+    //      if (strcmp(student_vec->student[i].id, student.id) == 0)
+    //      {
+    //          student_vec->student[i].english_score = student.english_score;
+    //          student_vec->student[i].math_score = student.math_score;
+    //          student_vec->student[i].science_score = student.science_score;
+    //          student_vec->student[i].total_score = student.total_score;
+    //          student_vec->student[i].average_score = student.average_score;
+    //          return;
+    //      }
+    //  }
 
     if (student_vec->size >= student_vec->capacity)
     {
         student_vec_grow(student_vec);
     }
 
-    student_vec->student[student_vec->size] = student;
+    student_vec->student[student_vec->size] = student_set_data(student.id, student.english_score, student.math_score, student.science_score);
     student_vec->size++;
 }
 
@@ -73,7 +73,7 @@ void student_vec_delete(StudentVec *student_vec, char *id)
         {
             for (unsigned int j = i; j < student_vec->size - 1; j++)
             {
-                //student_vec->student[j] = student_vec->student[j + 1];
+                // student_vec->student[j] = student_vec->student[j + 1];
                 strcpy(student_vec->student[j].id, student_vec->student[j + 1].id);
                 student_vec->student[j].english_score = student_vec->student[j + 1].english_score;
                 student_vec->student[j].math_score = student_vec->student[j + 1].math_score;
@@ -90,43 +90,38 @@ void student_vec_delete(StudentVec *student_vec, char *id)
 
 void student_vec_delete_duplicate_id(StudentVec *student_vec)
 {
-    //the student_vec id is already sorted
+    // the student_vec id is already sorted
     bool *is_duplicate = malloc(sizeof(bool) * student_vec->size);
     for (unsigned int i = 0; i < student_vec->size; i++)
     {
         is_duplicate[i] = false;
     }
 
-    for (unsigned int i = 0; i < student_vec->size; i++)
+    for (unsigned int i = 0; i < student_vec->size - 1; i++)
     {
-        for (unsigned int j = i + 1; j < student_vec->size - 1; j++)
+        if (strcmp(student_vec->student[i].id, student_vec->student[i + 1].id) == 0)
         {
-            if (strcmp(student_vec->student[i].id, student_vec->student[j].id) == 0)
-            {
-                is_duplicate[j] = true;
-                //student_vec_delete(student_vec, student_vec->student[j].id);
-            }
+            is_duplicate[i] = true;
+            // student_vec_delete(student_vec, student_vec->student[j].id);
         }
     }
 
-    Student *new_student = malloc(sizeof(Student) * student_vec->capacity);
-    student_vec->student = new_student;
+    unsigned int orig_size = student_vec->size;
+    student_vec->size = 0;
 
-    for (unsigned int i = 0; i < student_vec->size; i++)
+    for (unsigned int i = 0; i < orig_size; i++)
     {
         if (is_duplicate[i] == false)
         {
             student_vec_add(student_vec, student_vec->student[i]);
         }
     }
-
     free(is_duplicate);
-    free(student_vec->student);
 }
 
 Student student_vec_search_by_id(StudentVec *student_vec, char *id)
 {
-    //maybe hashing student_id is better
+    // maybe hashing student_id is better
 
     Student student;
     int found = 0;
@@ -304,7 +299,7 @@ void student_vec_log_top_ten_score_by_subject(StudentVec *student_vec, int subje
         {
             unsigned int continue_flag = 0;
 
-            for (unsigned int l = 0; l < k; l++) //if find jth largest, skip
+            for (unsigned int l = 0; l < k; l++) // if find jth largest, skip
             {
                 if (used_index[l] == j)
                 {
@@ -367,7 +362,7 @@ void student_vec_log_top_ten_score_by_total_score(StudentVec *student_vec)
         {
             unsigned int continue_flag = 0;
 
-            for (unsigned int l = 0; l < k; l++) //if find jth largest, skip
+            for (unsigned int l = 0; l < k; l++) // if find jth largest, skip
             {
                 if (used_index[l] == j)
                 {
@@ -392,31 +387,27 @@ void student_vec_log_top_ten_score_by_total_score(StudentVec *student_vec)
     }
 }
 
-void student_vec_insertion_sort_by_id(StudentVec *student_vec)
+void student_vec_insertion_sort_by_id(StudentVec *student_vec, int left, int right)
 {
-    //insertion sort by id
-    Student temp_student;
-    int i, j; //j could be negative
+    int i, j;
+    Student temp;
 
-    for (i = 1; i < student_vec->size; i++)
+    for (i = left + 1; i <= right; i++)
     {
-        temp_student = student_vec->student[i];
-        j = i - 1;
+        temp = student_vec->student[i];
 
-        while (j >= 0 && strcmp(temp_student.id,
-                                student_vec->student[j].id) <= 0)
+        for (j = i - 1; j >= left && strcmp(temp.id, student_vec->student[j].id) < 0; j--)
         {
             student_vec->student[j + 1] = student_vec->student[j];
-            j--;
         }
 
-        student_vec->student[j + 1] = temp_student;
+        student_vec->student[j + 1] = temp;
     }
 }
 
 void student_vec_merge_sort_by_id(StudentVec *student_vec, int start, int end)
 {
-    //merge sort by id
+    // merge sort by id
     int mid;
     if (start < end)
     {
@@ -435,7 +426,7 @@ void student_vec_merge_by_id(StudentVec *student_vec, int start, int mid, int en
 
     Student *L = malloc(n1 * sizeof(Student));
     Student *R = malloc(n2 * sizeof(Student));
-    //Student L[n1], R[n2];
+    // Student L[n1], R[n2];
 
     for (i = 0; i < n1; i++)
     {
@@ -486,7 +477,25 @@ void student_vec_merge_by_id(StudentVec *student_vec, int start, int mid, int en
 
 void student_vec_tim_sort_by_id(StudentVec *student_vec)
 {
-    //tim sort
+    int batch = 256;
+    // tim sort
+    for (int i = 0; i < student_vec->size; i += batch)
+        student_vec_insertion_sort_by_id(student_vec, i, min(i + batch - 1, student_vec->size - 1));
+
+    for (int size = batch; size < student_vec->size; size = size * 2)
+    {
+        for (int left = 0; left < student_vec->size; left += size * 2)
+        {
+            int mid = left + size - 1;
+            int right = min(left + size * 2 - 1, student_vec->size - 1);
+
+            if (mid < right)
+            {
+                student_vec_merge_by_id(student_vec, left, mid, right);
+            }
+        }
+    }
+    return;
 }
 
 Student student_set_data(char *id, double english, double math, double science)
@@ -530,4 +539,16 @@ Student student_rand_data()
 
     Student student = student_set_data(rand_id, rand_english, rand_math, rand_science);
     return student;
+}
+
+double min(double a, double b)
+{
+    if (a < b)
+    {
+        return a;
+    }
+    else
+    {
+        return b;
+    }
 }

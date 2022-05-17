@@ -117,6 +117,8 @@ void feature_insert_student_data(StudentVec *student_vec)
     Student new_student = student_set_data(student_id, english, math, science);
 
     student_vec_add(student_vec, new_student);
+    student_vec_tim_sort_by_id(student_vec);
+    student_vec_delete_duplicate_id(student_vec);
 }
 
 void feature_load_from_csv(StudentVec *student_vec)
@@ -131,8 +133,8 @@ void feature_load_from_csv(StudentVec *student_vec)
 
 void feature_log_student_data_by_id(StudentVec *student_vec)
 {
-    student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
-    //student_vec_insertion_sort_by_id(student_vec);
+    //student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
+    // student_vec_insertion_sort_by_id(student_vec);
     student_vec_log(student_vec);
 }
 
@@ -201,6 +203,8 @@ void feature_add_delete_student_data(StudentVec *student_vec)
         user_insert_student_score(&english, &math, &science);
         Student new_student = student_set_data(student_id, english, math, science);
         student_vec_add(student_vec, new_student);
+        student_vec_tim_sort_by_id(student_vec);
+        student_vec_delete_duplicate_id(student_vec);
     }
     else if (choice == 2)
     {
@@ -216,11 +220,14 @@ void feature_add_rand_data(StudentVec *student_vec)
     scanf("%d", &num);
 
     student_vec_add_rand_data(student_vec, num);
+    //student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
+    student_vec_tim_sort_by_id(student_vec);
+    student_vec_delete_duplicate_id(student_vec);
 }
 
 void feature_save_csv(StudentVec *student_vec)
 {
-    //current time as file name
+    // current time as file name
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     char time_str[255];
