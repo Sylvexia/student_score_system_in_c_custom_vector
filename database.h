@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef enum subject
 {
@@ -33,6 +34,7 @@ void student_vec_grow(StudentVec *student_vec); // resize the vector, double the
 void student_vec_add(StudentVec *student_vec, Student student);
 void student_vec_add_rand_data(StudentVec *student_vec, int size);
 void student_vec_delete(StudentVec *student_vec, char *id);
+void student_vec_delete_duplicate_id(StudentVec *student_vec);
 Student student_vec_search_by_id(StudentVec *student_vec, char *id);
 void student_vec_load_from_csv(StudentVec *student_vec, char *file_name);
 void student_vec_save_to_csv(StudentVec *student_vec, char *file_name);
@@ -43,6 +45,7 @@ void student_vec_log_top_ten_score_by_subject(StudentVec *student_vec, int subje
 void student_vec_log_top_ten_score_by_total_score(StudentVec *student_vec);
 void student_vec_insertion_sort_by_id(StudentVec *student_vec);
 void student_vec_merge_sort_by_id(StudentVec *student_vec, int start, int end);
+void student_vec_merge_by_id(StudentVec *student_vec, int start, int mid, int end);
 void student_vec_tim_sort_by_id(StudentVec *student_vec);
 
 Student student_set_data(char *id, double english, double math, double science);

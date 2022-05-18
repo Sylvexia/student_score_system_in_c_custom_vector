@@ -59,7 +59,7 @@ void user_interface()
         printf("capacity size: %d\n", student_vec.capacity);
         printf("size: %d\n", student_vec.size);
 
-        printf("allocated size: %dMB\n", student_vec.capacity * sizeof(Student) / 1048576);
+        printf("allocated size: %lfMB\n", student_vec.capacity * sizeof(Student) / 1048576.0);
 
         print_manual();
         scanf("%d", &feature_id);
@@ -75,7 +75,7 @@ void user_interface()
         case LOG_SORTED_BY_ID:
             feature_log_student_data_by_id(&student_vec);
             break;
-        case SEARCH_BY_ID:
+        case SEARCH_BY_ID_EVALUATE:
             feature_search_by_id_evaluate(&student_vec);
             break;
         case SEARCH_TOP_TEN_SPECIFIC_SUBJECT:
@@ -91,7 +91,7 @@ void user_interface()
             exit = 1;
             student_vec_destroy(&student_vec);
             break;
-            
+
             /// debug features
         case INSERT_RAND_DATA:
             feature_add_rand_data(&student_vec);
@@ -122,9 +122,11 @@ void feature_insert_student_data(StudentVec *student_vec)
 void feature_load_from_csv(StudentVec *student_vec)
 {
     char file_name[255];
-    user_insert_file_name(&file_name);
+    user_insert_file_name(file_name);
 
     student_vec_load_from_csv(student_vec, file_name);
+    student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
+    student_vec_delete_duplicate_id(student_vec);
 }
 
 void feature_log_student_data_by_id(StudentVec *student_vec)
@@ -146,6 +148,8 @@ void feature_search_by_id_evaluate(StudentVec *student_vec)
 void feature_search_top_ten_score_by_subject(StudentVec *student_vec)
 {
     Subject subject;
+    int subject_id = 0;
+    subject_id = (int)subject;
     StudentVec top_ten_student_vec[10];
 
     printf("Insert subject:\n");
@@ -153,9 +157,9 @@ void feature_search_top_ten_score_by_subject(StudentVec *student_vec)
     printf("2. math\n");
     printf("3. science\n");
 
-    scanf("%d", &subject);
+    scanf("%d", &subject_id);
 
-    switch (subject)
+    switch (subject_id)
     {
     case ENGLISH:
         student_vec_log_top_ten_score_by_subject(student_vec, ENGLISH);
@@ -183,7 +187,7 @@ void feature_search_top_ten_score_by_total_score(StudentVec *student_vec)
 void feature_add_delete_student_data(StudentVec *student_vec)
 {
     int choice = 0;
-    int english, math, science;
+    double english, math, science;
     char student_id[10 + 1];
 
     printf("press 1 to add student, ");

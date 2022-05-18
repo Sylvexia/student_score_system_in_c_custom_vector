@@ -88,6 +88,42 @@ void student_vec_delete(StudentVec *student_vec, char *id)
     }
 }
 
+void student_vec_delete_duplicate_id(StudentVec *student_vec)
+{
+    //the student_vec id is already sorted
+    bool *is_duplicate = malloc(sizeof(bool) * student_vec->size);
+    for (unsigned int i = 0; i < student_vec->size; i++)
+    {
+        is_duplicate[i] = false;
+    }
+
+    for (unsigned int i = 0; i < student_vec->size; i++)
+    {
+        for (unsigned int j = i + 1; j < student_vec->size - 1; j++)
+        {
+            if (strcmp(student_vec->student[i].id, student_vec->student[j].id) == 0)
+            {
+                is_duplicate[j] = true;
+                //student_vec_delete(student_vec, student_vec->student[j].id);
+            }
+        }
+    }
+
+    Student *new_student = malloc(sizeof(Student) * student_vec->capacity);
+    student_vec->student = new_student;
+
+    for (unsigned int i = 0; i < student_vec->size; i++)
+    {
+        if (is_duplicate[i] == false)
+        {
+            student_vec_add(student_vec, student_vec->student[i]);
+        }
+    }
+
+    free(is_duplicate);
+    free(student_vec->student);
+}
+
 Student student_vec_search_by_id(StudentVec *student_vec, char *id)
 {
     //maybe hashing student_id is better

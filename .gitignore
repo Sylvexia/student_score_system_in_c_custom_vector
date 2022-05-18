@@ -54,3 +54,4 @@ dkms.conf
 bin/
 2022*
 build/
+*.csv
