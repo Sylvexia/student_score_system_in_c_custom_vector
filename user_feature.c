@@ -114,11 +114,18 @@ void feature_insert_student_data(StudentVec *student_vec)
     user_insert_student_id(student_id);
     user_insert_student_score(&english, &math, &science);
 
+    // start time
+    clock_t start = clock();
+
     Student new_student = student_set_data(student_id, english, math, science);
 
     student_vec_add(student_vec, new_student);
     student_vec_tim_sort_by_id(student_vec);
     student_vec_delete_duplicate_id(student_vec);
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 }
 
 void feature_load_from_csv(StudentVec *student_vec)
@@ -126,16 +133,28 @@ void feature_load_from_csv(StudentVec *student_vec)
     char file_name[255];
     user_insert_file_name(file_name);
 
+    // start time
+    clock_t start = clock();
+
     student_vec_load_from_csv(student_vec, file_name);
-    student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
+    student_vec_tim_sort_by_id(student_vec);
     student_vec_delete_duplicate_id(student_vec);
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 }
 
 void feature_log_student_data_by_id(StudentVec *student_vec)
 {
-    //student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
-    // student_vec_insertion_sort_by_id(student_vec);
+    // start time
+    clock_t start = clock();
+
     student_vec_log(student_vec);
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 }
 
 void feature_search_by_id_evaluate(StudentVec *student_vec)
@@ -143,8 +162,15 @@ void feature_search_by_id_evaluate(StudentVec *student_vec)
     char student_id[10 + 1];
     user_insert_student_id(student_id);
 
+    // start time
+    clock_t start = clock();
+
     Student student = student_vec_search_by_id(student_vec, student_id);
     student_vec_log_evaluate(student_vec, student);
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 }
 
 void feature_search_top_ten_score_by_subject(StudentVec *student_vec)
@@ -160,6 +186,9 @@ void feature_search_top_ten_score_by_subject(StudentVec *student_vec)
     printf("3. science\n");
 
     scanf("%d", &subject_id);
+
+    // start time
+    clock_t start = clock();
 
     switch (subject_id)
     {
@@ -179,11 +208,24 @@ void feature_search_top_ten_score_by_subject(StudentVec *student_vec)
         printf("input error\n");
         break;
     }
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    return;
 }
 
 void feature_search_top_ten_score_by_total_score(StudentVec *student_vec)
 {
+    // start time
+    clock_t start = clock();
+
     student_vec_log_top_ten_score_by_total_score(student_vec);
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 }
 
 void feature_add_delete_student_data(StudentVec *student_vec)
@@ -201,15 +243,31 @@ void feature_add_delete_student_data(StudentVec *student_vec)
     {
         user_insert_student_id(student_id);
         user_insert_student_score(&english, &math, &science);
+
+        // start time
+        clock_t start = clock();
+
         Student new_student = student_set_data(student_id, english, math, science);
         student_vec_add(student_vec, new_student);
         student_vec_tim_sort_by_id(student_vec);
         student_vec_delete_duplicate_id(student_vec);
+
+        // end time
+        clock_t end = clock();
+        printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
     }
     else if (choice == 2)
     {
         user_insert_student_id(student_id);
+
+        // start time
+        clock_t start = clock();
+
         student_vec_delete(student_vec, student_id);
+
+        // end time
+        clock_t end = clock();
+        printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
     }
 }
 
@@ -219,10 +277,17 @@ void feature_add_rand_data(StudentVec *student_vec)
     printf("insert number of students want to generate: ");
     scanf("%d", &num);
 
+    // start time
+    clock_t start = clock();
+
     student_vec_add_rand_data(student_vec, num);
-    //student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
+    // student_vec_merge_sort_by_id(student_vec, 0, student_vec->size - 1);
     student_vec_tim_sort_by_id(student_vec);
     student_vec_delete_duplicate_id(student_vec);
+
+    // end time
+    clock_t end = clock();
+    printf("seconds elapsed: %lf\n", (double)(end - start) / CLOCKS_PER_SEC);
 }
 
 void feature_save_csv(StudentVec *student_vec)
