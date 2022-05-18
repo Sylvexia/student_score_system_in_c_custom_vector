@@ -262,7 +262,6 @@ void student_vec_log_evaluate(StudentVec *student_vec, Student student)
         }
     }
 
-    student_vec_log(student_vec);
     printf("english rank: %d\n", english_rank);
     printf("math rank: %d\n", math_rank);
     printf("science rank: %d\n", science_rank);
@@ -520,9 +519,9 @@ Student student_set_data(char *id, double english, double math, double science)
 
 Student student_rand_data()
 {
-    double rand_english = (rand() % 1000000) / 1000.0;
-    double rand_math = (rand() % 1000000) / 1000.0;
-    double rand_science = (rand() % 1000000) / 1000.0;
+    double rand_english = (rand() % 1000) + rand() % 1000 / 1000.0;
+    double rand_math = (rand() % 1000) + rand() % 1000 / 1000.0;
+    double rand_science = (rand() % 1000) + rand() % 1000 / 1000.0;
     double rand_total = rand_english + rand_math + rand_science;
     double rand_average = rand_total / 3.0;
 
