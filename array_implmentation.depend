@@ -5,7 +5,7 @@
 1652722896 source:/home/sylvex/test/array_implmentation/user_feature.c
 	"user_feature.h"
 
-1652722876 /home/sylvex/test/array_implmentation/user_feature.h
+1652726332 /home/sylvex/test/array_implmentation/user_feature.h
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -14,8 +14,9 @@
 1652723487 source:/home/sylvex/test/array_implmentation/database.c
 	"database.h"
 
-1652348284 /home/sylvex/test/array_implmentation/database.h
+1652801696 /home/sylvex/test/array_implmentation/database.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	<stdbool.h>
 
