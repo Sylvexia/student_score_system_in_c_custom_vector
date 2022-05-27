@@ -56,9 +56,6 @@ void user_interface()
         enum FEATURES feature = 0;
         int feature_id = (int)feature;
 
-        printf("capacity size: %d\n", student_vec.capacity);
-        printf("size: %d\n", student_vec.size);
-
         printf("allocated size: %lfMB\n", student_vec.capacity * sizeof(Student) / 1048576.0);
 
         print_manual();
@@ -118,6 +115,18 @@ void feature_insert_student_data(StudentVec *student_vec)
     clock_t start = clock();
 
     Student new_student = student_set_data(student_id, english, math, science);
+
+    Student search_student = student_vec_search_by_id(student_vec, student_id);
+
+    if (search_student.id[0] != '\0')
+    {
+        // print student
+        printf("Overwrite student data, the origin student data was:\n");
+        printf("student id: %s\n", search_student.id);
+        printf("english: %lf\n", search_student.english_score);
+        printf("math: %lf\n", search_student.math_score);
+        printf("science: %lf\n", search_student.science_score);
+    }
 
     student_vec_add(student_vec, new_student);
     student_vec_tim_sort_by_id(student_vec);
