@@ -33,20 +33,6 @@ void student_vec_grow(StudentVec *student_vec)
 
 void student_vec_add(StudentVec *student_vec, Student student)
 {
-    // if student.id exist in student_vec, overwrite student data
-    //  for (unsigned int i = 0; i < student_vec->size; i++)
-    //  {
-    //      if (strcmp(student_vec->student[i].id, student.id) == 0)
-    //      {
-    //          student_vec->student[i].english_score = student.english_score;
-    //          student_vec->student[i].math_score = student.math_score;
-    //          student_vec->student[i].science_score = student.science_score;
-    //          student_vec->student[i].total_score = student.total_score;
-    //          student_vec->student[i].average_score = student.average_score;
-    //          return;
-    //      }
-    //  }
-
     if (student_vec->size >= student_vec->capacity)
     {
         student_vec_grow(student_vec);
@@ -262,6 +248,12 @@ void student_vec_log_evaluate(StudentVec *student_vec, Student student)
         }
     }
 
+    printf("Student id/English/Math/Science/Total Score:\n");
+    printf("%s %lf %lf %lf %lf\n", student.id,
+           student.english_score,
+           student.math_score,
+           student.science_score,
+           student.total_score);
     printf("english rank: %d\n", english_rank);
     printf("math rank: %d\n", math_rank);
     printf("science rank: %d\n", science_rank);

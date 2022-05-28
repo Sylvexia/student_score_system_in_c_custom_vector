@@ -127,6 +127,10 @@ void feature_insert_student_data(StudentVec *student_vec)
         printf("math: %lf\n", search_student.math_score);
         printf("science: %lf\n", search_student.science_score);
     }
+    else
+    {
+        printf("So, insert new student id: %s", new_student.id);
+    }
 
     student_vec_add(student_vec, new_student);
     student_vec_tim_sort_by_id(student_vec);
