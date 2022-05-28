@@ -129,7 +129,7 @@ void feature_insert_student_data(StudentVec *student_vec)
     }
     else
     {
-        printf("So, insert new student id: %s", new_student.id);
+        printf("So, insert new data with student id: %s\n", new_student.id);
     }
 
     student_vec_add(student_vec, new_student);
